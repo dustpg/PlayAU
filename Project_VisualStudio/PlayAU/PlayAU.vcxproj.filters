@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="header">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="header\xa2">
+      <UniqueIdentifier>{bb7c443d-3961-4fb3-888e-650c7a1b018a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\private">
+      <UniqueIdentifier>{9c0b5933-73ea-46a0-a3d8-7451b4bbe410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\libogg">
+      <UniqueIdentifier>{04b9d9ac-156b-49b9-a344-43dea2cea7ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\libvorbis">
+      <UniqueIdentifier>{70e9c07a-c5c1-4896-9e01-056553291591}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\private\p_XAudio2_7.h">
+      <Filter>header\xa2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\private\p_XAudio2_8.h">
+      <Filter>header\xa2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\private\p_XAudio2_base.h">
+      <Filter>header\xa2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\playau.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\au_engine.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\au_util.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\au_config.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\au_base.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\private\p_au_engine_interface.h">
+      <Filter>header\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\au_clip.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\au_engine_xa2.impl.hpp">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\au_engine.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_engine_xa2.7.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_engine_enum.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_clip.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libogg\src\framing.c">
+      <Filter>source\libogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libogg\src\bitwise.c">
+      <Filter>source\libogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\vorbisfile.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\window.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\analysis.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\bitrate.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\block.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\codebook.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\envelope.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\floor0.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\floor1.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\info.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\lookup.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\lpc.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\lsp.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\mapping0.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\mdct.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\psy.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\registry.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\res0.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\sharedbook.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\smallft.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\synthesis.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\vorbisenc.c">
+      <Filter>source\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_filestream.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_oggstream.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_engine_xa2.8.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\src\result.natvis">
+      <Filter>source</Filter>
+    </Natvis>
+  </ItemGroup>
+</Project>

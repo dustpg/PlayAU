@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{114100F6-6716-4D4D-ACF4-952CFC2A94FF}</ProjectGuid>
+    <RootNamespace>PlayAU</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)../../3rdparty/libogg/include/;$(ProjectDir)../../3rdparty/libvorbis/include/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)../../3rdparty/libogg/include/;$(ProjectDir)../../3rdparty/libvorbis/include/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)../../3rdparty/libogg/include/;$(ProjectDir)../../3rdparty/libvorbis/include/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)../../3rdparty/libogg/include/;$(ProjectDir)../../3rdparty/libvorbis/include/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <PreprocessorDefinitions>PLAYAU_TEST;_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <PreprocessorDefinitions>PLAYAU_TEST;_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <PreprocessorDefinitions>PLAYAU_TEST;_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <PreprocessorDefinitions>PLAYAU_TEST;_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\inc\au_base.h" />
+    <ClInclude Include="..\..\inc\au_clip.h" />
+    <ClInclude Include="..\..\inc\au_config.h" />
+    <ClInclude Include="..\..\inc\au_engine.h" />
+    <ClInclude Include="..\..\inc\au_util.h" />
+    <ClInclude Include="..\..\inc\playau.h" />
+    <ClInclude Include="..\..\src\au_engine_xa2.impl.hpp" />
+    <ClInclude Include="..\..\src\private\p_au_engine_interface.h" />
+    <ClInclude Include="..\..\src\private\p_XAudio2_7.h" />
+    <ClInclude Include="..\..\src\private\p_XAudio2_8.h" />
+    <ClInclude Include="..\..\src\private\p_XAudio2_base.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\3rdparty\libogg\src\bitwise.c" />
+    <ClCompile Include="..\..\3rdparty\libogg\src\framing.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\analysis.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\bitrate.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\block.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\codebook.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\envelope.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\floor0.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\floor1.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\info.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\lookup.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\lpc.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\lsp.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\mapping0.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\mdct.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\psy.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\registry.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\res0.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\sharedbook.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\smallft.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\synthesis.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\vorbisenc.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\vorbisfile.c" />
+    <ClCompile Include="..\..\3rdparty\libvorbis\lib\window.c" />
+    <ClCompile Include="..\..\src\au_clip.cpp" />
+    <ClCompile Include="..\..\src\au_engine.cpp" />
+    <ClCompile Include="..\..\src\au_engine_enum.cpp" />
+    <ClCompile Include="..\..\src\au_engine_xa2.7.cpp" />
+    <ClCompile Include="..\..\src\au_engine_xa2.8.cpp" />
+    <ClCompile Include="..\..\src\au_filestream.cpp" />
+    <ClCompile Include="..\..\src\au_oggstream.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\src\result.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
