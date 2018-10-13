@@ -5,6 +5,7 @@
 
 #include <cstdint>
 
+
 namespace PlayAU {
     /// <summary>
     /// Result code
@@ -50,36 +51,49 @@ namespace PlayAU {
     enum AUConstantE : uint32_t {
         // now ver - 0x00AABBCC: AA.BB.CC
         VERSION = 0x00000400,   // 0.4.0
+        // group max count
+        MAX_GROUP_COUNT = 8,
+        // group name max length
+        MAX_GROUP_NAME_LENGTH = 16,
+        // group length in byte
+        GROUP_BUFLEN_BYTE = MAX_GROUP_NAME_LENGTH + 4 * sizeof(void*),
+        // audio stream header peek length
+        AUDIO_HEADER_PEEK_LENGTH = 16,
         // audio api buffer length in pointer
-        AUDIO_API_BUFLEN = 4,
+        AUDIO_API_BUFLEN = 5,
         // audio context buffer length in pointer
         AUDIO_CTX_BUFLEN = 4,
         // file stream buffer lenth in pointer
         FILE_STREAM_BUFLEN = 4,
         // audio stream buffer lenth in byte
-        AUDIO_STREAM_BUFLEN = (FILE_STREAM_BUFLEN + 4) * sizeof(void*) + 4 * 4,
+        AUDIO_STREAM_BUFLEN = (FILE_STREAM_BUFLEN + 6) * sizeof(void*) + 4 * 4,
     };
     // wave format
     enum FormatWave : uint16_t {
-        // unknown [error]
+        // unknown
         Wave_Unknown = 0,
-        // pcm [supported]
+        // pcm
         Wave_PCM,
-        // MS-ADPCM [decode by youself]
+        // MS-ADPCM
         Wave_MSADPCM,
-        // IEEE FLOAT[supported]
+        // IEEE FLOAT
         Wave_IEEEFloat,
     };
     // clip flag and formt
     enum ClipFlag : uint32_t {
         // none flag
         Flag_None = 0,
+        // public flag
+        Flag_Public = 0xFFFF,
         // loop forever, cannot combine with Flag_AutoDestroy
-        Flag_LoopInfinite = 1 << 0,
+        //Flag_LoopInfinite = 1 << 0,
         // auto destroy if end of playing
         //Flag_AutoDestroy = 1 << 1,
         // load all data
-        Flag_LoadAll = 1 << 2,
+        //Flag_LoadAll = 1 << 2,
+
+        // [private] live clip
+        Flag_p_Live = 1 << 16
     };
     // wave format
     struct WaveFormat {
@@ -88,10 +102,8 @@ namespace PlayAU {
         // bits per sample
         uint16_t    bits_per_sample;
         // channels
-        uint16_t    channels;
+        uint8_t     channels;
         // fmt tag
-        uint16_t    fmt_tag;
-        // unused
-        uint16_t    unused;
+        uint8_t     fmt_tag;
     };
 }

@@ -7,14 +7,12 @@
 #include "au_base.h"
 
 namespace PlayAU {
-    // CoInitialize
-    auto CoInitialize() noexcept->Result;
-    // CoUninitialize
-    void CoUninitialize() noexcept;
     // clip
     class CAUAudioClip;
+    // group
+    class CAUAudioGroup;
     // stream
-    struct IAUStream; struct XAUAudioStream;
+    struct XAUStream; struct XAUAudioStream;
     // audio device
     struct AudioDeviceInfo {
         // name of device
@@ -22,13 +20,16 @@ namespace PlayAU {
         // id of device
         const char16_t*     id;
     };
-    // enum devices, return now count of device(maybe less than real)
-    auto EnumDevices(
-        char16_t buf[], 
-        AudioDeviceInfo infos[], 
-        uint32_t buflen, 
-        uint32_t infolen
-    ) noexcept ->uint32_t;
+    // api
+    struct PLAYAU_API API {
+        // enum devices, return now count of device(maybe less than real)
+        static auto EnumDevices(
+            char16_t buf[],
+            AudioDeviceInfo infos[],
+            uint32_t buflen,
+            uint32_t infolen
+        ) noexcept->uint32_t;
+    };
     // audio config interface
     struct IAUConfigure;
     // Audio Engine
@@ -57,17 +58,22 @@ namespace PlayAU {
         void Suspend() noexcept;
         // Resume
         void Resume() noexcept;
+        // call context
+        void CallContext(void* ctx1, void* ctx2) noexcept;
     public:
         // create clip from file
-        Clip CreateClipFromFile(ClipFlag, const char16_t file[]) noexcept;
+        Clip CreateClipFromFile(ClipFlag, const char16_t file[], const char*group=nullptr) noexcept;
         // create clip from stream
-        Clip CreateClipFromStream(ClipFlag, IAUStream&) noexcept;
+        Clip CreateClipFromStream(ClipFlag, XAUStream&, const char*group = nullptr) noexcept;
         // create clip from audio
-        Clip CreateClipFromAudio(ClipFlag, XAUAudioStream&&) noexcept;
-        // create clip from memory
-
-        // create wave from memory
-
+        Clip CreateClipFromAudio(ClipFlag, XAUAudioStream&&, const char*group = nullptr) noexcept;
+        // create live clip
+        Clip CreateLiveClip(const WaveFormat&, const char*group = nullptr) noexcept;
+    public:
+        // find group
+        auto FindGroup(const char name[]) noexcept->CAUAudioGroup*;
+        // create empty group
+        auto CreateEmptyGroup(const char name[]) noexcept->CAUAudioGroup*;
     private:
         // config
         IAUConfigure*       m_pConfig = nullptr;
@@ -79,6 +85,8 @@ namespace PlayAU {
         uintptr_t           m_buffer[AUDIO_API_BUFLEN];
         // def-config buffer
         uintptr_t           m_defcfg[1];
+        // group buffer
+        uint8_t             m_group[GROUP_BUFLEN_BYTE * MAX_GROUP_COUNT];
     private:
         // no copy
         CAUEngine(const CAUEngine&) noexcept = delete;

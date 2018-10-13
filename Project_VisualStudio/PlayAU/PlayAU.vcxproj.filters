@@ -21,6 +21,9 @@
     <Filter Include="source\libvorbis">
       <UniqueIdentifier>{70e9c07a-c5c1-4896-9e01-056553291591}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\libflac">
+      <UniqueIdentifier>{d1e89494-63fa-43e6-be07-fcd17ad6c65e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\private\p_XAudio2_7.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\au_engine_xa2.impl.hpp">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\au_group.h">
+      <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +155,15 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\au_engine_xa2.8.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_flacstream.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_group.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\au_mp3stream.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

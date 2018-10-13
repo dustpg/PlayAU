@@ -9,19 +9,21 @@
 namespace PlayAU {
     // Audio Engine
     class CAUEngine;
+    // group
+    class CAUAudioGroup;
     // audio stream
     struct XAUAudioStream;
     // private clip data
     class PLAYAU_API CAUAudioClip {
         // friend
         friend CAUEngine;
+    public:
         // obj
         PLAYAU_OBJ;
-    public:
         // private
         struct Private;
         // ctor
-        CAUAudioClip(CAUEngine&, ClipFlag, XAUAudioStream&&) noexcept;
+        CAUAudioClip(CAUEngine&, ClipFlag, XAUAudioStream&&, CAUAudioGroup*) noexcept;
         // [nullsafe] destroy this
         void Destroy() noexcept;
         // [nullsafe] play this
@@ -36,14 +38,19 @@ namespace PlayAU {
         auto Tell() const noexcept ->double;
         // [nullsafe] get duration
         auto Duration() const noexcept ->double;
-        // set volume
+        // [nullsafe] set volume
         void SetVolume(float v) noexcept;
-        // set frequency ratio
+        // [nullsafe] set frequency ratio
         void SetFrequencyRatio(float f) noexcept;
-        // get volume
+        // [nullsafe] get volume
         auto GetVolume() const noexcept ->float;
-        // get frequency ratio
+        // [nullsafe] get frequency ratio
         auto GetFrequencyRatio() const noexcept ->float;
+    public:
+        // [nullsafe] get live buffer left
+        auto GetLiveBufferLeft() const noexcept->uint32_t;
+        // [nullsafe] submit ref-able live buffer
+        void SunmitRefableLiveBuffer(uint8_t*, uint32_t) noexcept;
     private:
         // context
         uintptr_t                   m_context[AUDIO_CTX_BUFLEN];
@@ -53,6 +60,10 @@ namespace PlayAU {
         bool                        m_playing = false;
         // state: pausing
         bool                        m_pausing = false;
+    public:
+        // group
+        CAUAudioGroup*     const    group;
+    private:
         // audio engine
         CAUEngine&                  m_engine;
         // audio stream

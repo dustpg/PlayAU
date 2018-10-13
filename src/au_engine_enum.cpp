@@ -37,7 +37,7 @@ namespace PlayAU {
 /// <param name="buflen">The buflen.</param>
 /// <param name="infolen">The infolen.</param>
 /// <returns></returns>
-auto PlayAU::EnumDevices(
+auto PlayAU::API::EnumDevices(
     char16_t buf[], 
     AudioDeviceInfo infos[], 
     uint32_t buflen, 

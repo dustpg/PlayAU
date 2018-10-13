@@ -1,13 +1,18 @@
 ﻿#include "../inc/playau.h"
 #include "../inc/au_clip.h"
+#include "../inc/au_group.h"
 #include "private/p_au_engine_interface.h"
+
 #include <cwchar>
+#include <cstring>
 
 namespace PlayAU {
 #ifndef NDEBUG
     // debug check
     extern void debug_check_clip() noexcept;
 #endif
+    // dispose groups
+    void DisposeGroups(CAUEngine&) noexcept;
     // XAudio 2.7
     auto InitInterfaceXAudio2_7(void* buf, IAUConfigure& config) noexcept->Result;
     // XAudio 2.8
@@ -32,6 +37,10 @@ namespace PlayAU {
             return buf;
 #endif
         }
+        // call context
+        void CallContext(CAUEngine& engine, void* ctx1, void* ctx2) noexcept {
+            engine.CallContext(ctx1, ctx2);
+        }
     };
 }
 
@@ -40,21 +49,25 @@ namespace PlayAU {
 /// </summary>
 struct PlayAU::CAUEngine::Private {
     // init api
-    static Result InitAPI(CAUEngine& engine, APILevel level) noexcept {
+    static Result InitAPI(CAUEngine& engine, APILevel& level) noexcept {
         Result hr = { Result::RE_NOINTERFACE };
         switch (level)
         {
         case PlayAU::APILevel::Level_Auto:
             // 尝试XAudio 2.8
             hr = InitInterfaceXAudio2_8(engine.m_buffer, *engine.m_pConfig);
+            level = APILevel::Level_XAudio2_8;
             if (hr) break;
             // 尝试XAudio 2.7
             hr = InitInterfaceXAudio2_7(engine.m_buffer, *engine.m_pConfig);
+            level = APILevel::Level_XAudio2_7;
             break;
         case PlayAU::APILevel::Level_XAudio2_7:
+            // 尝试XAudio 2.7
             hr = InitInterfaceXAudio2_7(engine.m_buffer, *engine.m_pConfig);
             break;
         case PlayAU::APILevel::Level_XAudio2_8:
+            // 尝试XAudio 2.8
             hr = InitInterfaceXAudio2_8(engine.m_buffer, *engine.m_pConfig);
             break;
         }
@@ -79,8 +92,9 @@ auto PlayAU::CAUEngine::Initialize(
         static_assert(sizeof(CAUDefConfig) == sizeof(m_defcfg), "same!");
     }
     m_pConfig = config;
+    m_level = level;
     // 获取
-    Result hr = Private::InitAPI(*this, level);
+    Result hr = Private::InitAPI(*this, m_level);
     // 尝试利用
     return hr;
 }
@@ -90,6 +104,8 @@ auto PlayAU::CAUEngine::Initialize(
 /// </summary>
 /// <returns></returns>
 void PlayAU::CAUEngine::Uninitialize() noexcept {
+    // 释放所有分组
+    PlayAU::DisposeGroups(*this);
 #ifndef NDEBUG
     // 简易内存泄漏检测
     debug_check_clip();
@@ -116,9 +132,22 @@ void PlayAU::CAUEngine::Resume() noexcept {
 
 
 /// <summary>
+/// Calls the context.
+/// </summary>
+/// <param name="ctx1">The CTX1.</param>
+/// <param name="ctx2">The CTX2.</param>
+/// <returns></returns>
+void PlayAU::CAUEngine::CallContext(void* ctx1, void* ctx2) noexcept {
+    const auto api = reinterpret_cast<IAUAudioAPI*>(m_buffer);
+    api->CallContext(ctx1, ctx2);
+}
+
+
+/// <summary>
 /// Initializes a new instance of the <see cref="CAUEngine"/> class.
 /// </summary>
 PlayAU::CAUEngine::CAUEngine() noexcept {
+    std::memset(m_group, 0, sizeof(m_group));
 }
 
 
@@ -130,58 +159,3 @@ PlayAU::CAUEngine::~CAUEngine() noexcept {
 
 }
 
-
-
-
-#ifdef PLAYAU_TEST
-#include <cstdio>
-
-extern "C" void __stdcall Sleep(uint32_t);
-
-int main() {
-    PlayAU::CAUEngine engine;
-    PlayAU::CoInitialize();
-    //{
-        char16_t buf[1024]; PlayAU::AudioDeviceInfo infos[64];
-        PlayAU::EnumDevices(buf, infos, 1024, 64);
-    //}
-    if (engine.Initialize()) {
-        const auto clip = engine.CreateClipFromFile(
-            PlayAU::Flag_None, 
-            u"../../audiofiledemo/Hymn_of_ussr_instrumental.ogg"
-            //u"../../../Doc/Sakura.ogg"
-        );
-
-        clip->Play();
-        for (int i = 0; i != 500; ++i) {
-            const auto dur = clip->Tell();
-            std::printf("%f\n", dur);
-            ::Sleep(500);
-            switch (i)
-            {
-            case 5:
-            case 15:
-                clip->Stop();
-                break;
-            case 9:
-            case 19:
-                clip->Play();
-                break;
-            }
-        }
-
-
-
-        std::getchar();
-        clip->Pause();
-        std::getchar();
-        clip->Play();
-        std::getchar();
-        ::Sleep(1000);
-        clip->Destroy();
-        engine.Uninitialize();
-    }
-    PlayAU::CoUninitialize();
-    return 0;
-}
-#endif

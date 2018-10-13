@@ -11,23 +11,6 @@
 #include <new>
 
 
-/// <summary>
-/// Coes the initialize.
-/// </summary>
-/// <returns></returns>
-auto PlayAU::CoInitialize() noexcept -> Result {
-    return { ::CoInitialize(nullptr) };
-}
-
-/// <summary>
-/// Coes the uninitialize.
-/// </summary>
-/// <returns></returns>
-void PlayAU::CoUninitialize() noexcept {
-    ::CoUninitialize();
-}
-
-
 #define XAUDIO2_DEBUG_ENGINE            0x0001
 
 
@@ -45,7 +28,8 @@ namespace PlayAU {
     /// <summary>
     /// XAudio ver 2.7
     /// </summary>
-    struct CAUXAudio2_7 final: IAUAudioAPI {
+    struct CAUXAudio2_7 final: IAUAudioAPI,
+        XAudio2::Ver2_7::IXAudio2EngineCallback {
         // XAudio2::Ver2_7::IXAudio2MasteringVoice
         using XAudio2__Ver2_7__IMastering = XAudio2::Ver2_7::IXAudio2MasteringVoice;
         // dtor
@@ -55,14 +39,34 @@ namespace PlayAU {
         // init
         auto Init(IAUConfigure&) noexcept->Result;
     public:
+        // OnProcessingPassStart
+        void STDMETHODCALLTYPE OnProcessingPassStart() noexcept override;
+        // OnProcessingPassEnd
+        void STDMETHODCALLTYPE OnProcessingPassEnd() noexcept override;
+        // OnCriticalError
+        void STDMETHODCALLTYPE OnCriticalError(HRESULT code) noexcept override;
+    public:
         // Ctx
         struct Ctx;
+        // group
+        struct Group;
+        // Submix
+        using IXAudio2SubmixVoice = XAudio2::Ver2_7::IXAudio2SubmixVoice;
+        // using
+        using XAUDIO2_VOICE_DETAILS = XAudio2::Ver2_7::XAUDIO2_VOICE_DETAILS;
+        // using
+        using XAUDIO2_SEND_DESCRIPTOR = XAudio2::Ver2_7::XAUDIO2_SEND_DESCRIPTOR;
+        // using
+        using XAUDIO2_VOICE_SENDS = XAudio2::Ver2_7::XAUDIO2_VOICE_SENDS;
+    public:
         // dispose
         void Dispose() noexcept override;
         // suspend
         void Suspend() noexcept override;
         // resume
         void Resume() noexcept override;
+        // call context
+        void CallContext(void* ctx1, void* ctx2) noexcept override;
         // make clip context
         bool MakeClipCtx(void*) noexcept override;
         // dispose clip context
@@ -81,6 +85,19 @@ namespace PlayAU {
         auto RatioClip(void*, float*) noexcept -> float override;
         // volume clip context
         auto VolumeClip(void*, float*) noexcept -> float override;
+        // live: buffer left
+        auto LiveClipBuffer(void*) noexcept->uint32_t override;
+        // live: buffer submit
+        void LiveClipSubmit(void*, void*, uint32_t) noexcept override;
+        // create group
+        bool CreateGroup(CAUAudioGroup&) noexcept override;
+        // dispose group
+        void DisposeGroup(CAUAudioGroup&) noexcept override;
+        // volume group
+        auto VolumeGroup(CAUAudioGroup&, float*) noexcept -> float override;
+    private:
+        // stop
+        void stop_clip(void*) noexcept;
     private:
         // XAudio2
         XAudio2::Ver2_7::IXAudio2*  m_pXAudio2 = nullptr;
@@ -115,6 +132,8 @@ namespace PlayAU {
 }
 
 
+
+
 /// <summary>
 /// Initializes this instance.
 /// </summary>
@@ -141,6 +160,11 @@ auto PlayAU::CAUXAudio2_7::Init(IAUConfigure& config) noexcept -> Result {
 #endif
             ;
         hr.code = m_pXAudio2->Initialize(0, XAudio2::XAUDIO2_DEFAULT_PROCESSOR);
+    }
+    // 注册回调
+    if (hr) {
+        XAudio2::Ver2_7::IXAudio2EngineCallback* const call = this;
+        hr.code = m_pXAudio2->RegisterForCallbacks(call);
     }
     // 枚举设备
     uint32_t device_index = 0;
