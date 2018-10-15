@@ -51,6 +51,9 @@ namespace PlayAU {
         auto GetLiveBufferLeft() const noexcept->uint32_t;
         // [nullsafe] submit ref-able live buffer
         void SunmitRefableLiveBuffer(uint8_t*, uint32_t) noexcept;
+    public:
+        // [nullsafe] set loop
+        void SetLoop(bool) noexcept;
     private:
         // context
         uintptr_t                   m_context[AUDIO_CTX_BUFLEN];
@@ -64,6 +67,8 @@ namespace PlayAU {
         // group
         CAUAudioGroup*     const    group;
     private:
+        // node
+        Node                        m_node;
         // audio engine
         CAUEngine&                  m_engine;
         // audio stream

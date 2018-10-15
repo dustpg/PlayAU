@@ -19,6 +19,23 @@ struct PlayAU::CAUEngine::Private {
     static IAUAudioAPI* API(CAUEngine& engine) noexcept {
         return reinterpret_cast<IAUAudioAPI*>(engine.m_buffer);
     }
+    // 添加片段
+    static void AddClip(CAUEngine& engine, Node& node) noexcept {
+        // 尾节点前面的节点指向新的节点
+        engine.m_tail.prev->next = &node;
+        // 新的节点执行尾节点之前的节点
+        node.prev = engine.m_tail.prev;
+        // 新的节点后面是尾节点
+        node.next = &engine.m_tail;
+        // 尾节点前面是新节点
+        engine.m_tail.prev = &node;
+    }
+    // 添加片段
+    static void RemoveClip(CAUEngine& engine, Node& node) noexcept {
+        // 链接前后节点
+        node.prev->next = node.next;
+        node.next->prev = node.prev;
+    }
 };
 
 
@@ -38,6 +55,13 @@ struct PlayAU::CAUAudioClip::Private {
     static auto AS(CAUAudioClip& clip) noexcept {
         return reinterpret_cast<XAUAudioStream*>(clip.m_asbuffer);
     }
+    // from node
+    static auto FromNode(Node& node) noexcept {
+        const auto ptr = reinterpret_cast<char*>(&node);
+        const auto offset = offsetof(CAUAudioClip, m_node);
+        const auto obj = reinterpret_cast<CAUAudioClip*>(ptr - offset);
+        return obj;
+    }
 };
 
 /// <summary>
@@ -55,6 +79,8 @@ PlayAU::CAUAudioClip::CAUAudioClip(
 ) noexcept : m_engine(engine), m_flags(flag), group(group0) {
     constexpr size_t offset_ctx = offsetof(CAUAudioClip, m_context);
     static_assert(offset_ctx == 0, "must be 0");
+    // 添加
+    CAUEngine::Private::AddClip(engine, m_node);
     // 移动数据
     if (&stream) stream.MoveTo(m_asbuffer);
 }
@@ -64,6 +90,8 @@ PlayAU::CAUAudioClip::CAUAudioClip(
 /// </summary>
 /// <returns></returns>
 PlayAU::CAUAudioClip::~CAUAudioClip() noexcept {
+    // 释放节点
+    CAUEngine::Private::RemoveClip(m_engine, m_node);
     // 释放上下文环境
     const auto api = CAUEngine::Private::API(m_engine);
     api->DisposeClipCtx(m_context);
@@ -87,18 +115,14 @@ namespace PlayAU {
         const WaveFormat* fmt,
         const char* group
     ) noexcept->CAUAudioClip*;
-#ifndef NDEBUG
-    static size_t s_clips = 0;
-    extern void debug_check_clip() noexcept {
-        assert(s_clips == 0 && "mem-leak");
+    /// <summary>
+    /// Disposes the clip via.
+    /// </summary>
+    /// <param name="node">The node.</param>
+    /// <returns></returns>
+    void DisposeClipVia(Node& node) noexcept {
+        CAUAudioClip::Private::FromNode(node)->Destroy();
     }
-    static void debug_check_clip_a(const void* const p) noexcept {
-        if (p) ++s_clips;
-    }
-    static void debug_check_clip_b(const void* const p) noexcept {
-        if (p) --s_clips;
-    }
-#endif
 }
 
 /// <summary>
@@ -129,9 +153,6 @@ auto PlayAU::CreateClip(
         group_obj
     };
     //alignas(CAUAudioClip) static char buf[sizeof(CAUAudioClip)];
-#ifndef NDEBUG
-    debug_check_clip_a(obj);
-#endif
     if (!obj) return nullptr;
 
     // 提供了格式
@@ -274,9 +295,6 @@ auto PlayAU::CAUEngine::CreateLiveClip(
 /// </summary>
 /// <returns></returns>
 void PlayAU::CAUAudioClip::Destroy() noexcept {
-#ifndef NDEBUG
-    debug_check_clip_b(this);
-#endif
     delete this;
 }
 
@@ -430,4 +448,22 @@ void PlayAU::CAUAudioClip::SunmitRefableLiveBuffer(uint8_t* data, uint32_t len) 
     PLAYAU_NULL_RETURN((void)0);
     const auto api = CAUEngine::Private::API(m_engine);
     api->LiveClipSubmit(m_context, data, len);
+}
+
+
+#include <atomic>
+
+/// <summary>
+/// Sets the loop.
+/// </summary>
+/// <param name="is">if set to <c>true</c> [is].</param>
+/// <returns></returns>
+void PlayAU::CAUAudioClip::SetLoop(bool is) noexcept {
+    PLAYAU_NULL_RETURN((void)0);
+    // TODO: 线程安全?
+    auto& flag = const_cast<ClipFlag&>(m_flags);
+    static_assert(sizeof(flag) == sizeof(uint32_t), "same!");
+    auto& flag_uint = reinterpret_cast<uint32_t&>(flag);
+    if (is) flag_uint |= Flag_LoopInfinite;
+    else flag_uint &= ~Flag_LoopInfinite;
 }

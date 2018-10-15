@@ -7,12 +7,10 @@
 #include <cstring>
 
 namespace PlayAU {
-#ifndef NDEBUG
-    // debug check
-    extern void debug_check_clip() noexcept;
-#endif
     // dispose groups
     void DisposeGroups(CAUEngine&) noexcept;
+    // dispose clip via node
+    void DisposeClipVia(Node&) noexcept;
     // XAudio 2.7
     auto InitInterfaceXAudio2_7(void* buf, IAUConfigure& config) noexcept->Result;
     // XAudio 2.8
@@ -104,12 +102,11 @@ auto PlayAU::CAUEngine::Initialize(
 /// </summary>
 /// <returns></returns>
 void PlayAU::CAUEngine::Uninitialize() noexcept {
+    // 释放未释放片段
+    while (m_head.next != &m_tail)
+        PlayAU::DisposeClipVia(*m_head.next);
     // 释放所有分组
     PlayAU::DisposeGroups(*this);
-#ifndef NDEBUG
-    // 简易内存泄漏检测
-    debug_check_clip();
-#endif
 }
 
 /// <summary>
@@ -147,6 +144,10 @@ void PlayAU::CAUEngine::CallContext(void* ctx1, void* ctx2) noexcept {
 /// Initializes a new instance of the <see cref="CAUEngine"/> class.
 /// </summary>
 PlayAU::CAUEngine::CAUEngine() noexcept {
+    m_head.prev = nullptr;
+    m_head.next = &m_tail;
+    m_tail.prev = &m_head;
+    m_tail.next = nullptr;
     std::memset(m_group, 0, sizeof(m_group));
 }
 

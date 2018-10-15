@@ -69,7 +69,7 @@ namespace PlayAU {
         AUDIO_STREAM_BUFLEN = (FILE_STREAM_BUFLEN + 6) * sizeof(void*) + 4 * 4,
     };
     // wave format
-    enum FormatWave : uint16_t {
+    enum FormatWave : uint8_t {
         // unknown
         Wave_Unknown = 0,
         // pcm
@@ -86,14 +86,14 @@ namespace PlayAU {
         // public flag
         Flag_Public = 0xFFFF,
         // loop forever, cannot combine with Flag_AutoDestroy
-        //Flag_LoopInfinite = 1 << 0,
+        Flag_LoopInfinite = 1 << 0,
         // auto destroy if end of playing
-        //Flag_AutoDestroy = 1 << 1,
+        Flag_AutoDestroyOnEnd = 1 << 1,
         // load all data
         //Flag_LoadAll = 1 << 2,
 
         // [private] live clip
-        Flag_p_Live = 1 << 16
+        Flag_p_Live = 1 << 16,
     };
     // wave format
     struct WaveFormat {
@@ -105,5 +105,12 @@ namespace PlayAU {
         uint8_t     channels;
         // fmt tag
         uint8_t     fmt_tag;
+    };
+    // node
+    struct Node {
+        // prev
+        Node*       prev;
+        // next
+        Node*       next;
     };
 }

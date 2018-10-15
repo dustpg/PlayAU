@@ -157,13 +157,7 @@
     <ClCompile Include="..\..\src\au_engine_xa2.8.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\au_flacstream.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\au_group.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\au_mp3stream.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

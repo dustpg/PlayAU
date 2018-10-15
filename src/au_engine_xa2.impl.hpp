@@ -106,7 +106,7 @@ public:
     // Called just before this voice's processing pass begins.
     void STDMETHODCALLTYPE OnVoiceProcessingPassStart(UINT32 SamplesRequired) noexcept override;
     // Called just after this voice's processing pass ends.
-    void STDMETHODCALLTYPE OnVoiceProcessingPassEnd() noexcept override {}
+    void STDMETHODCALLTYPE OnVoiceProcessingPassEnd() noexcept override;
     // Called when this voice has just finished playing a buffer stream
     void STDMETHODCALLTYPE OnStreamEnd() noexcept override;
     // Called when this voice is about to start processing a new buffer.
@@ -131,6 +131,8 @@ public:
     void Dispose() noexcept;
     // submit next buffer
     void SubmitNext() noexcept;
+    // submit count
+    void SubmitCount() noexcept;
     // flag
     auto Flag() const noexcept {
         auto& clip = *reinterpret_cast<const CAUAudioClip*>(this);
@@ -170,7 +172,9 @@ public:
     // bucket/data data
     Bucket*                                     buffer = nullptr;
     // next bucket id
-    uint32_t                                    bucket = 0;
+    uint16_t                                    bucket = 0;
+    // auto destroy
+    bool                                        destroy = false;
 };
 
 
@@ -253,20 +257,30 @@ void PlayAU::CAUXAudio2_8::PlayClip(void* ctx) noexcept {
     }
     // 非live
     if (!(obj->Flag() & Flag_p_Live)) {
-        XAudio2::XAUDIO2_VOICE_STATE state = { 0 };
-#ifdef Ver2_8
-        src->GetState(&state);
-#else
-        src->GetState(&state, XAudio2::XAUDIO2_VOICE_NOSAMPLESPLAYED);
-#endif
-        const int count = int(BUCKET_COUNT - state.BuffersQueued) - 1;
-        for (int i = 0; i < count; ++i)
-            obj->SubmitNext();
+        obj->SubmitCount();
     }
     const auto hr = src->Start(0);
     // TODO: 错误处理
     assert(SUCCEEDED(hr));
     obj->Playing() = true;
+}
+
+
+/// <summary>
+/// Submits the count.
+/// </summary>
+/// <returns></returns>
+void PlayAU::CAUXAudio2_8::Ctx::SubmitCount() noexcept {
+    XAudio2::XAUDIO2_VOICE_STATE state = { 0 };
+    const auto src = this->source;
+#ifdef Ver2_8
+    src->GetState(&state);
+#else
+    src->GetState(&state, XAudio2::XAUDIO2_VOICE_NOSAMPLESPLAYED);
+#endif
+    const int count = int(BUCKET_COUNT - state.BuffersQueued) - 1;
+    for (int i = 0; i < count; ++i)
+        this->SubmitNext();
 }
 
 
@@ -525,12 +539,42 @@ void PlayAU::CAUXAudio2_8::Ctx::OnVoiceProcessingPassStart(UINT32 SamplesRequire
 }
 
 /// <summary>
+/// Called when [voice processing pass end].
+/// </summary>
+/// <returns></returns>
+void PlayAU::CAUXAudio2_8::Ctx::OnVoiceProcessingPassEnd() noexcept {
+    if (this->destroy) {
+        this->destroy = false;
+        const auto clip = reinterpret_cast<CAUAudioClip*>(this);
+        clip->Destroy();
+    }
+}
+
+/// <summary>
 /// Called when [stream end].
 /// 音频流结束
 /// </summary>
 /// <returns></returns>
 void PlayAU::CAUXAudio2_8::Ctx::OnStreamEnd() noexcept {
-    this->Playing() = false;
+    const auto flag = this->Flag();
+    // 无限循环
+    if (flag & Flag_LoopInfinite) {
+        this->AudioStream()->Seek(0, XAUStream::Move_Begin);
+        this->SubmitCount();
+        const auto hr = this->source->Start(0);
+        // TODO: 错误处理
+        assert(SUCCEEDED(hr));
+    }
+    // 自动销毁
+    else if (flag & Flag_AutoDestroyOnEnd) {
+        this->source->Stop();
+        this->destroy = true;
+    }
+    // 其他情况
+    else {
+        this->source->Stop();
+        this->Playing() = false;
+    }
 }
 
 

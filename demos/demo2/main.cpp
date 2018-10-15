@@ -70,7 +70,8 @@ int main() noexcept  {
         }
 
         const auto clip = engine.CreateClipFromFile(
-            PlayAU::Flag_None, 
+            PlayAU::Flag_None,
+            //PlayAU::Flag_AutoDestroyOnEnd,
             //u"../../audiofiledemo/Hymn_of_ussr_instrumental.ogg"
             //u"../../../Doc/Sakura.ogg"
             u"../../../Doc/Castle_in_the_Sky.ogg"
@@ -79,12 +80,12 @@ int main() noexcept  {
             ,
             "BGM"
         );
-        //const auto dur = clip->Duration();
-        //clip->Seek(180);
+        const auto dur = clip->Duration();
+        clip->Seek(dur-10);
         int bk = 9;
 
         clip->Play();
-        clip->SetVolume(2.0);
+        clip->SetLoop(true);
 
         clip->SetFrequencyRatio(1.25f);
 
@@ -92,7 +93,9 @@ int main() noexcept  {
 
         window(&config.hwnd);
 
-        clip->Destroy();
+        // engine.Uninitialize will release
+        //clip->Destroy();
+
         engine.Uninitialize();
     }
     ::CoUninitialize();

@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #define PLAYAU_FLAG_NULL_THISPTR_SAFE
-//#define PLAYAU_FLAG_FLAC_SUPPORT
-//#define PLAYAU_FLAG_MP3_SUPPORT
 
 #define PLAYAU_API
 //#define PLAYAU_API __declspec(dllexport) 

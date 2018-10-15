@@ -81,6 +81,10 @@ namespace PlayAU {
         APILevel            m_level = APILevel::Level_Auto;
         // version number
         uint32_t    const   m_version = PlayAU::VERSION;
+        // head clip
+        Node                m_head;
+        // tail clip
+        Node                m_tail;
         // audio api buffer
         uintptr_t           m_buffer[AUDIO_API_BUFLEN];
         // def-config buffer

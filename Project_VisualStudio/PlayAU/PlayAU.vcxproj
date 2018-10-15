@@ -179,9 +179,7 @@
     <ClCompile Include="..\..\src\au_engine_xa2.7.cpp" />
     <ClCompile Include="..\..\src\au_engine_xa2.8.cpp" />
     <ClCompile Include="..\..\src\au_filestream.cpp" />
-    <ClCompile Include="..\..\src\au_flacstream.cpp" />
     <ClCompile Include="..\..\src\au_group.cpp" />
-    <ClCompile Include="..\..\src\au_mp3stream.cpp" />
     <ClCompile Include="..\..\src\au_oggstream.cpp" />
   </ItemGroup>
   <ItemGroup>
